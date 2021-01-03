@@ -1,5 +1,6 @@
 package net.sf.l2j.gameserver.handler.chathandlers;
 
+import net.sf.l2j.Config;
 import net.sf.l2j.gameserver.data.xml.MapRegionData;
 import net.sf.l2j.gameserver.enums.FloodProtector;
 import net.sf.l2j.gameserver.enums.SayType;
@@ -26,7 +27,7 @@ public class ChatShout implements IChatHandler
 		
 		for (Player worldPlayer : World.getInstance().getPlayers())
 		{
-			if (region == MapRegionData.getInstance().getMapRegion(worldPlayer.getX(), worldPlayer.getY()))
+			if (Config.GLOBAL_SHOUT || region == MapRegionData.getInstance().getMapRegion(worldPlayer.getX(), worldPlayer.getY()))
 				worldPlayer.sendPacket(cs);
 		}
 	}

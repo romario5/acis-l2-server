@@ -549,6 +549,7 @@ public final class Config
 	public static boolean ENABLE_FALLING_DAMAGE;
 	
 	/** Debug & Dev */
+	public static boolean IS_OBT;
 	public static boolean NO_SPAWNS;
 	public static boolean DEVELOPER;
 	public static boolean PACKET_HANDLER_DEBUG;
@@ -582,7 +583,8 @@ public final class Config
 	public static int TRADE_CHAT_TIME;
 	public static int SOCIAL_TIME;
 	public static int MOVE_TIME;
-	
+	public static boolean GLOBAL_SHOUT;
+
 	/** ThreadPool */
 	public static int SCHEDULED_THREAD_POOL_COUNT;
 	public static int THREADS_PER_SCHEDULED_THREAD_POOL;
@@ -1196,6 +1198,7 @@ public final class Config
 		
 		ENABLE_FALLING_DAMAGE = server.getProperty("EnableFallingDamage", true);
 		
+		IS_OBT = server.getProperty("IsOBT", false);
 		NO_SPAWNS = server.getProperty("NoSpawns", false);
 		DEVELOPER = server.getProperty("Developer", false);
 		PACKET_HANDLER_DEBUG = server.getProperty("PacketHandlerDebug", false);
@@ -1225,7 +1228,8 @@ public final class Config
 		TRADE_CHAT_TIME = server.getProperty("TradeChatTime", 0);
 		SOCIAL_TIME = server.getProperty("SocialTime", 2000);
 		MOVE_TIME = server.getProperty("MoveTime", 100);
-		
+		GLOBAL_SHOUT = server.getProperty("GlobalShout", false);
+
 		SCHEDULED_THREAD_POOL_COUNT = server.getProperty("ScheduledThreadPoolCount", -1);
 		THREADS_PER_SCHEDULED_THREAD_POOL = server.getProperty("ThreadsPerScheduledThreadPool", 4);
 		INSTANT_THREAD_POOL_COUNT = server.getProperty("InstantThreadPoolCount", -1);
