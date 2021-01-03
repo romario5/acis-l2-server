@@ -1,7 +1,7 @@
 package net.sf.l2j.gameserver.network.clientpackets;
 
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
-import net.sf.l2j.gameserver.network.serverpackets.VersionCheck;
+import net.sf.l2j.gameserver.network.serverpackets.CryptInit;
 
 public final class SendProtocolVersion extends L2GameClientPacket
 {
@@ -22,7 +22,7 @@ public final class SendProtocolVersion extends L2GameClientPacket
 			case 740:
 			case 744:
 			case 746:
-				getClient().sendPacket(new VersionCheck(getClient().enableCrypt()));
+				getClient().sendPacket(new CryptInit(getClient().enableCrypt()));
 				break;
 			
 			default:

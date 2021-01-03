@@ -60,13 +60,16 @@ public final class GameClient extends MMOClient<MMOConnection<GameClient>> imple
 	private static final String DELETE_CHAR_ITEMS = "DELETE FROM items WHERE owner_id=?";
 	private static final String DELETE_CHAR_RBP = "DELETE FROM character_raid_points WHERE char_id=?";
 	private static final String DELETE_CHAR = "DELETE FROM characters WHERE obj_Id=?";
+
+	private String _HWID = "";
 	
 	public static enum GameClientState
 	{
-		CONNECTED, // client has just connected
-		AUTHED, // client has authed but doesnt has character attached to it yet
-		ENTERING, // client is currently loading his Player instance, but didn't end
-		IN_GAME // client has selected a char and is in game
+		CONNECTED,   // client has just connected
+		AUTHED,      // client has authed but doesnt has character attached to it yet
+		ENTERING,    // client is currently loading his Player instance, but didn't end
+		IN_GAME,     // client has selected a char and is in game
+		DISCONNECTED // client is disconnected
 	}
 	
 	private final long[] _floodProtectors = new long[FloodProtector.VALUES_LENGTH];
@@ -111,6 +114,16 @@ public final class GameClient extends MMOClient<MMOConnection<GameClient>> imple
 					getPlayer().getSummon().store();
 			}
 		}, 300000L, 900000L);
+	}
+
+	public void setHWID(String hwid)
+	{
+		_HWID = hwid;
+	}
+
+	public String getHWID()
+	{
+		return _HWID;
 	}
 	
 	@Override
@@ -203,6 +216,7 @@ public final class GameClient extends MMOClient<MMOConnection<GameClient>> imple
 	{
 		try
 		{
+			setState(GameClientState.DISCONNECTED);
 			ThreadPool.execute(() ->
 			{
 				boolean fast = true;

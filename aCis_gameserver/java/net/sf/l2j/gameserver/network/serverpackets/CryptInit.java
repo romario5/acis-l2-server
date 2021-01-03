@@ -4,11 +4,11 @@ import java.util.Arrays;
 
 import net.sf.l2j.Config;
 
-public final class VersionCheck extends L2GameServerPacket
+public final class CryptInit extends L2GameServerPacket
 {
 	private final byte[] _key;
 	
-	public VersionCheck(byte[] key)
+	public CryptInit(byte[] key)
 	{
 		_key = Arrays.copyOfRange(key, 0, 8);
 	}
