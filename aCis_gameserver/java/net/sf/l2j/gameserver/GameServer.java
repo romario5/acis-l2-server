@@ -83,11 +83,7 @@ import net.sf.l2j.gameserver.handler.TargetHandler;
 import net.sf.l2j.gameserver.handler.UserCommandHandler;
 import net.sf.l2j.gameserver.idfactory.IdFactory;
 import net.sf.l2j.gameserver.model.World;
-import net.sf.l2j.gameserver.model.boat.BoatGiranTalking;
-import net.sf.l2j.gameserver.model.boat.BoatGludinRune;
-import net.sf.l2j.gameserver.model.boat.BoatInnadrilTour;
-import net.sf.l2j.gameserver.model.boat.BoatRunePrimeval;
-import net.sf.l2j.gameserver.model.boat.BoatTalkingGludin;
+import net.sf.l2j.gameserver.model.boat.*;
 import net.sf.l2j.gameserver.model.olympiad.Olympiad;
 import net.sf.l2j.gameserver.model.olympiad.OlympiadGameManager;
 import net.sf.l2j.gameserver.network.GameClient;
@@ -250,15 +246,15 @@ public class GameServer
 		StringUtil.printSection("Quests & Scripts");
 		ScriptData.getInstance();
 		
-		if (Config.ALLOW_BOAT)
-		{
-			BoatManager.getInstance();
-			BoatGiranTalking.load();
-			BoatGludinRune.load();
-			BoatInnadrilTour.load();
-			BoatRunePrimeval.load();
-			BoatTalkingGludin.load();
-		}
+
+		BoatManager.getInstance();
+//		TestBoat.load();
+		if (Config.BOAT_GIRAN_TALKING) BoatGiranTalking.load();
+		if (Config.BOAT_GLUDIN_RUNE) BoatGludinRune.load();
+		if (Config.BOAT_INNADRIL_TOUR) BoatInnadrilTour.load();
+		if (Config.BOAT_RUNE_PRIMEVAL) BoatRunePrimeval.load();
+		if (Config.BOAT_TALKING_GLUDIN) BoatTalkingGludin.load();
+
 		
 		StringUtil.printSection("Events");
 		DerbyTrackManager.getInstance();

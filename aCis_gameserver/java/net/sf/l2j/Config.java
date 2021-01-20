@@ -543,11 +543,18 @@ public final class Config
 	public static int WEAR_PRICE;
 	public static boolean ALLOW_LOTTERY;
 	public static boolean ALLOW_WATER;
-	public static boolean ALLOW_BOAT;
 	public static boolean ALLOW_CURSED_WEAPONS;
 	public static boolean ALLOW_MANOR;
 	public static boolean ENABLE_FALLING_DAMAGE;
-	
+
+	/** Boats */
+	public static boolean BOATS_SCHEDULING;
+	public static boolean BOAT_GLUDIN_RUNE;
+	public static boolean BOAT_RUNE_PRIMEVAL;
+	public static boolean BOAT_TALKING_GLUDIN;
+	public static boolean BOAT_GIRAN_TALKING;
+	public static boolean BOAT_INNADRIL_TOUR;
+
 	/** Debug & Dev */
 	public static boolean IS_OBT;
 	public static boolean NO_SPAWNS;
@@ -1193,7 +1200,14 @@ public final class Config
 		ALLOW_LOTTERY = server.getProperty("AllowLottery", true);
 		ALLOW_WATER = server.getProperty("AllowWater", true);
 		ALLOW_MANOR = server.getProperty("AllowManor", true);
-		ALLOW_BOAT = server.getProperty("AllowBoat", true);
+
+		BOATS_SCHEDULING = server.getProperty("BoatsScheduling", true);
+		BOAT_GLUDIN_RUNE = server.getProperty("BoatGludinRune", true);
+		BOAT_RUNE_PRIMEVAL = server.getProperty("BoatRunePrimeval", true);
+		BOAT_TALKING_GLUDIN = server.getProperty("BoatTalkingGludin", true);
+		BOAT_GIRAN_TALKING = server.getProperty("BoatGiranTalking", true);
+		BOAT_INNADRIL_TOUR = server.getProperty("BoatInnadrilTour", true);
+
 		ALLOW_CURSED_WEAPONS = server.getProperty("AllowCursedWeapons", true);
 		
 		ENABLE_FALLING_DAMAGE = server.getProperty("EnableFallingDamage", true);

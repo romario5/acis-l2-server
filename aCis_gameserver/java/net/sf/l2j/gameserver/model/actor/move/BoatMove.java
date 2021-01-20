@@ -1,9 +1,12 @@
 package net.sf.l2j.gameserver.model.actor.move;
 
+import net.sf.l2j.gameserver.enums.SayType;
 import net.sf.l2j.gameserver.enums.actors.MoveType;
+import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.actor.Boat;
 import net.sf.l2j.gameserver.model.actor.Player;
 import net.sf.l2j.gameserver.model.location.BoatLocation;
+import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleDeparture;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleInfo;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleStarted;
@@ -97,7 +100,7 @@ public class BoatMove extends CreatureMove<Boat>
 		
 		// Set the heading.
 		_actor.getPosition().setHeadingTo(loc);
-		
+
 		registerMoveTask();
 		
 		// Broadcast the movement (angle change, speed change, destination).
@@ -110,6 +113,10 @@ public class BoatMove extends CreatureMove<Boat>
 	 */
 	public void executePath(BoatLocation[] path)
 	{
+		// Current coordinates is zero on first call. Lets initialize it.
+		_xAccurate = _actor.getX();
+		_yAccurate = _actor.getY();
+
 		// Initialize values.
 		_pathIndex = 0;
 		_currentPath = path;

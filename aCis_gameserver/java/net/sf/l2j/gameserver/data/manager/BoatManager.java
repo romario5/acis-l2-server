@@ -11,19 +11,23 @@ import net.sf.l2j.gameserver.model.actor.Boat;
 import net.sf.l2j.gameserver.model.actor.Player;
 import net.sf.l2j.gameserver.model.actor.template.CreatureTemplate;
 import net.sf.l2j.gameserver.model.location.BoatLocation;
+import net.sf.l2j.gameserver.model.location.Location;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 
 public class BoatManager
 {
-	public static final int TALKING_ISLAND = 0;
+	public static final int TALKING_HARBOR = 0;
 	public static final int GLUDIN_HARBOR = 1;
 	public static final int RUNE_HARBOR = 2;
-	
+
 	public static final int BOAT_BROADCAST_RADIUS = 20000;
 	
 	private final Map<Integer, Boat> _boats = new HashMap<>();
 	private final boolean[] _docksBusy = new boolean[3];
-	
+	private final int[] _docksBoats = new int[3];
+	private final long[] _docksBusyDurations = new long[3];
+	private final long[] _docksBusyStartTime = new long[3];
+
 	protected BoatManager()
 	{
 	}
@@ -31,13 +35,11 @@ public class BoatManager
 	/**
 	 * Generate a new {@link Boat}, using a fresh {@link CreatureTemplate}.
 	 * @param boatId : The boat id to use.
-	 * @param x : The X position to use.
-	 * @param y : The Y position to use.
-	 * @param z : The Z position to use.
+	 * @param loc: spawn location
 	 * @param heading : The heading to use.
 	 * @return the new boat instance.
 	 */
-	public Boat getNewBoat(int boatId, int x, int y, int z, int heading)
+	public Boat getNewBoat(int boatId, Location loc, int heading)
 	{
 		final StatSet set = new StatSet();
 		set.set("id", boatId);
@@ -75,7 +77,7 @@ public class BoatManager
 		set.set("runSpd", 0);
 		
 		final Boat boat = new Boat(IdFactory.getInstance().getNextId(), new CreatureTemplate(set));
-		boat.spawnMe(x, y, z, heading);
+		boat.spawnMe(loc, heading);
 		boat.renewBoatEntrances();
 		
 		_boats.put(boat.getObjectId(), boat);
@@ -97,13 +99,57 @@ public class BoatManager
 	{
 		_docksBusy[dockId] = value;
 	}
-	
+
+	/**
+	 * Locks dock with given ID. Ship can't take dock until it will be released.
+	 * @param boatId : The boat ID.
+	 * @param dockId : The dock ID.
+	 * @param duration : Time the dock will be busy.
+	 */
+	public void takeDock(int boatId, int dockId, long duration) {
+		_docksBoats[dockId] = boatId;
+		_docksBusy[dockId] = true;
+		_docksBusyStartTime[dockId] = System.currentTimeMillis();
+		_docksBusyDurations[dockId] = duration;
+	}
+
+	/**
+	 * @param dockId : The dock ID.
+	 * @return busy duration left in milliseconds
+	 */
+	public long getDockBusyDurationLeft(int dockId)
+	{
+		return _docksBusy[dockId]
+				? Math.max(0, _docksBusyDurations[dockId] - (System.currentTimeMillis() - _docksBusyStartTime[dockId]))
+				: 0;
+	}
+
+	/**
+	 * Releases dock so another ship can take it.
+	 * @param boatId : The boat ID.
+	 * @param dockId : The dock ID.
+	 */
+	public boolean releaseDock(int boatId, int dockId) {
+		if (_docksBoats[dockId] == 0 || _docksBoats[dockId] == boatId) {
+			_docksBusy[dockId] = false;
+			_docksBoats[dockId] = 0;
+			_docksBusyStartTime[dockId] = 0;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isDockTakenByBoat(int dockId, int boatId)
+	{
+		return _docksBoats[dockId] == boatId;
+	}
+
 	/**
 	 * Check if the dock is busy.
 	 * @param dockId : The dock id.
 	 * @return true if the dock is locked, false otherwise.
 	 */
-	public boolean isBusyDock(int dockId)
+	public boolean isDockBusy(int dockId)
 	{
 		return _docksBusy[dockId];
 	}
@@ -122,6 +168,19 @@ public class BoatManager
 				player.sendPacket(packet);
 		}
 	}
+	/**
+	 * Broadcast one packet in both path points.
+	 * @param point : The first location to broadcast the packet.
+	 * @param packet : The packet to broadcast.
+	 */
+	public void broadcastPacket(BoatLocation point, L2GameServerPacket packet)
+	{
+		for (Player player : World.getInstance().getPlayers())
+		{
+			if (player.isIn2DRadius(point, BOAT_BROADCAST_RADIUS))
+				player.sendPacket(packet);
+		}
+	}
 	
 	/**
 	 * Broadcast several packets in both path points.
@@ -134,6 +193,23 @@ public class BoatManager
 		for (Player player : World.getInstance().getPlayers())
 		{
 			if (player.isIn2DRadius(point1, BOAT_BROADCAST_RADIUS) || player.isIn2DRadius(point2, BOAT_BROADCAST_RADIUS))
+			{
+				for (L2GameServerPacket packet : packets)
+					player.sendPacket(packet);
+			}
+		}
+	}
+
+	/**
+	 * Broadcast several packets in both path points.
+	 * @param point : The location to broadcast the packet.
+	 * @param packets : The packets to broadcast.
+	 */
+	public void broadcastPackets(BoatLocation point, L2GameServerPacket... packets)
+	{
+		for (Player player : World.getInstance().getPlayers())
+		{
+			if (player.isIn2DRadius(point, BOAT_BROADCAST_RADIUS))
 			{
 				for (L2GameServerPacket packet : packets)
 					player.sendPacket(packet);

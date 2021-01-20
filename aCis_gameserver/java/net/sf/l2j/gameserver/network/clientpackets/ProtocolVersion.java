@@ -3,7 +3,7 @@ package net.sf.l2j.gameserver.network.clientpackets;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.CryptInit;
 
-public final class SendProtocolVersion extends L2GameClientPacket
+public final class ProtocolVersion extends L2GameClientPacket
 {
 	private int _version;
 	

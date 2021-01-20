@@ -11,6 +11,7 @@ import net.sf.l2j.commons.pool.ThreadPool;
 
 import net.sf.l2j.gameserver.data.xml.MapRegionData;
 import net.sf.l2j.gameserver.data.xml.MapRegionData.TeleportType;
+import net.sf.l2j.gameserver.enums.SayType;
 import net.sf.l2j.gameserver.enums.ZoneId;
 import net.sf.l2j.gameserver.enums.actors.OperateType;
 import net.sf.l2j.gameserver.model.actor.ai.type.BoatAI;
@@ -24,6 +25,7 @@ import net.sf.l2j.gameserver.model.location.BoatEntrance;
 import net.sf.l2j.gameserver.model.location.Location;
 import net.sf.l2j.gameserver.model.location.Point2D;
 import net.sf.l2j.gameserver.network.SystemMessageId;
+import net.sf.l2j.gameserver.network.serverpackets.CreatureSay;
 import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
 import net.sf.l2j.gameserver.network.serverpackets.SystemMessage;
 import net.sf.l2j.gameserver.network.serverpackets.VehicleInfo;
@@ -230,6 +232,7 @@ public class Boat extends Creature
 	 */
 	public void addPassenger(Player player)
 	{
+
 		// Player is already set on another Boat, or isn't set on any Boat.
 		if (player.getBoat() == null || (player.getBoat() != null && player.getBoat() != this))
 			return;
@@ -268,7 +271,7 @@ public class Boat extends Creature
 		// Retrieve initial List of Players.
 		final List<Player> passengers = getKnownTypeInRadius(Player.class, 1000);
 		
-		// Test and potentially add Players matching this boat criterias as passengers.
+		// Test and potentially add Players matching this boat criteria as passengers.
 		for (Player player : passengers)
 			addPassenger(player);
 		

@@ -40,7 +40,7 @@ public final class GamePacketHandler implements IPacketHandler<GameClient>, ICli
 				switch (opcode)
 				{
 					case 0x00:
-						msg = new SendProtocolVersion();
+						msg = new ProtocolVersion();
 						break;
 					case 0x08:
 						msg = new AuthLogin();

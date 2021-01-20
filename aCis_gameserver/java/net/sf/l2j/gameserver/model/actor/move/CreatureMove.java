@@ -10,21 +10,19 @@ import net.sf.l2j.commons.pool.ThreadPool;
 
 import net.sf.l2j.gameserver.data.manager.ZoneManager;
 import net.sf.l2j.gameserver.enums.AiEventType;
+import net.sf.l2j.gameserver.enums.SayType;
 import net.sf.l2j.gameserver.enums.actors.MoveType;
 import net.sf.l2j.gameserver.geoengine.GeoEngine;
 import net.sf.l2j.gameserver.geoengine.geodata.GeoStructure;
 import net.sf.l2j.gameserver.model.World;
 import net.sf.l2j.gameserver.model.WorldObject;
+import net.sf.l2j.gameserver.model.actor.Boat;
 import net.sf.l2j.gameserver.model.actor.Creature;
 import net.sf.l2j.gameserver.model.actor.Playable;
 import net.sf.l2j.gameserver.model.actor.Player;
 import net.sf.l2j.gameserver.model.location.Location;
 import net.sf.l2j.gameserver.model.zone.type.WaterZone;
-import net.sf.l2j.gameserver.network.serverpackets.ExServerPrimitive;
-import net.sf.l2j.gameserver.network.serverpackets.L2GameServerPacket;
-import net.sf.l2j.gameserver.network.serverpackets.MoveToLocation;
-import net.sf.l2j.gameserver.network.serverpackets.MoveToPawn;
-import net.sf.l2j.gameserver.network.serverpackets.StopMove;
+import net.sf.l2j.gameserver.network.serverpackets.*;
 
 /**
  * This class groups all movement data related to a {@link Creature}.
@@ -266,7 +264,7 @@ public class CreatureMove<T extends Creature>
 		
 		return true;
 	}
-	
+
 	/**
 	 * Update the position of the Creature during a movement and return True if the movement is finished.<BR>
 	 * <BR>
@@ -304,7 +302,10 @@ public class CreatureMove<T extends Creature>
 		final double dz = _destination.getZ() - curZ;
 		
 		// We use Z for delta calculation only if different of GROUND MoveType.
-		final double leftDistance = (type == MoveType.GROUND) ? Math.sqrt(dx * dx + dy * dy) : Math.sqrt(dx * dx + dy * dy + dz * dz);
+		final double leftDistance = (type == MoveType.GROUND)
+				? Math.sqrt(dx * dx + dy * dy)
+				: Math.sqrt(dx * dx + dy * dy + dz * dz);
+
 		final double passedDistance = _actor.getStatus().getMoveSpeed() / 10;
 		
 		// Calculate the maximum Z.
@@ -332,7 +333,9 @@ public class CreatureMove<T extends Creature>
 			// Note: Z coord shifted up to avoid dual-layer issues.
 			nextX = (int) _xAccurate;
 			nextY = (int) _yAccurate;
-			nextZ = Math.min((type == MoveType.GROUND) ? GeoEngine.getInstance().getHeight(nextX, nextY, curZ + 2 * GeoStructure.CELL_HEIGHT) : (curZ + (int) (dz * fraction + 0.5)), maxZ);
+			nextZ = Math.min((type == MoveType.GROUND)
+					? GeoEngine.getInstance().getHeight(nextX, nextY, curZ + 2 * GeoStructure.CELL_HEIGHT)
+					: (curZ + (int) (dz * fraction + 0.5)), maxZ);
 		}
 		// Already there : set the position to the destination.
 		else
@@ -348,7 +351,7 @@ public class CreatureMove<T extends Creature>
 			_blocked = true;
 			return true;
 		}
-		
+
 		// Set the position of the Creature.
 		_actor.setXYZ(nextX, nextY, nextZ);
 		
