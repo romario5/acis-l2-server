@@ -112,7 +112,7 @@ public class BoatTalkingGludin extends BoatEngine
 				broadcastPacket(GLUDIN_DOCK[0], TALKING_DOCK[0], ARRIVAL_GLUDIN1);
 				break;
 			case 7:
-				if (isDockBusy(BoatManager.GLUDIN_HARBOR))
+				if (isDockBusy(GLUDIN_HARBOR) && !isDockTakenByBoat(GLUDIN_HARBOR, _boat))
 				{
 					if (_shoutCount == 0)
 						BoatManager.getInstance().broadcastPacket(GLUDIN_DOCK[0], TALKING_DOCK[0], BUSY_GLUDIN);
@@ -197,7 +197,7 @@ public class BoatTalkingGludin extends BoatEngine
 				broadcastPacket(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVAL_TALKING1);
 				break;
 			case 17:
-				if (isDockBusy(BoatManager.TALKING_HARBOR))
+				if (isDockBusy(TALKING_HARBOR) && !isDockTakenByBoat(TALKING_HARBOR, _boat))
 				{
 					if (_shoutCount == 0)
 						broadcastPacket(TALKING_DOCK[0], GLUDIN_DOCK[0], BUSY_TALKING);

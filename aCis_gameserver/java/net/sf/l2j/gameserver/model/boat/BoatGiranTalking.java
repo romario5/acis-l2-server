@@ -118,7 +118,7 @@ public class BoatGiranTalking extends BoatEngine
 				break;
 
 			case 7:
-				if (isDockBusy(BoatManager.TALKING_HARBOR))
+				if (isDockBusy(TALKING_HARBOR) && !isDockTakenByBoat(TALKING_HARBOR, _boat))
 				{
 					if (_shoutCount == 0)
 						broadcastPacket(TALKING_DOCK[0], GIRAN_DOCK_LOCATION, BUSY_TALKING);
