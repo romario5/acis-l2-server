@@ -214,7 +214,7 @@ public class BoatTalkingGludin extends BoatEngine
 			case 18:
 				broadcastPackets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVED_AT_TALKING);
 				_boat.broadcastPacket(TALKING_SOUND);
-				_cycle = 18;
+				_cycle = 19;
 				ThreadPool.execute(this);
 				return;
 
@@ -232,6 +232,7 @@ public class BoatTalkingGludin extends BoatEngine
 				broadcastPackets(TALKING_DOCK[0], GLUDIN_DOCK[0], ARRIVED_AT_TALKING_2);
 				takeDock(TALKING_HARBOR, WAITING_DURATION);
 				ThreadPool.schedule(this, 300000);
+				break;
 		}
 		_shoutCount = 0;
 		
